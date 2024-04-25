@@ -1,12 +1,14 @@
 import pygame
 import sys
 from game_parameters import *
+import serial
 
-# Initialize Pygame
+# Initialize Pygame and serial connection
 pygame.init()
 from player import Player
 from dot import Dot
 
+camera = serial.Serial(SERIAL_PORT, 9600)
 # Create the screen
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Dot Chomper!")
@@ -34,10 +36,16 @@ while time_remaining > 0:
         # control player with arrow keys
     
     ### TODO: CONTROL PLAYER WITH CAMERA ###
-
-    x,y = pygame.mouse.get_pos()
-    player1.set_position(x,y)
-    player2.set_position(3* SCREEN_WIDTH / 4, SCREEN_HEIGHT / 2)
+    camera.write(b"read\n")
+    msg = camera.readline().decode("ascii").strip()
+    rx, ry, bx, by = [int(x) for x in msg.split(',')]
+    rx = int(800 - ((rx/316)*800))
+    ry = int((ry/208)*600)
+    bx = int(800 - ((bx/316) * 800))
+    by = int((by/208) * 600)
+    x, y = pygame.mouse.get_pos()
+    player1.set_position(rx, ry)
+    player2.set_position(bx, by)
 
     ### END TODO ###
 

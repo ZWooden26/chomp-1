@@ -1,5 +1,5 @@
 # Serial Port
-SERIAL_PORT = "COM9"
+SERIAL_PORT = "COM8"
 
 # Screen dimensions
 SCREEN_WIDTH = 800
