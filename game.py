@@ -39,11 +39,13 @@ while time_remaining > 0:
     camera.write(b"read\n")
     msg = camera.readline().decode("ascii").strip()
     rx, ry, bx, by = [int(x) for x in msg.split(',')]
-    rx = int(800 - ((rx/316)*800))
-    ry = int((ry/208)*600)
-    bx = int(800 - ((bx/316) * 800))
-    by = int((by/208) * 600)
-    x, y = pygame.mouse.get_pos()
+    if ry != -1 and rx != -1:
+        rx = int(800 - ((rx/316)*800))
+        ry = int((ry/208)*600)
+    if bx != -1 and by != -1:
+        bx = int(800 - ((bx/316) * 800))
+        by = int((by/208) * 600)
+    # x, y = pygame.mouse.get_pos()
     player1.set_position(rx, ry)
     player2.set_position(bx, by)
 
@@ -53,7 +55,7 @@ while time_remaining > 0:
     for dot in dots:
         if player1.collide(dot):
             dots.remove(dot)
-        if player2.collide(dot):
+        elif player2.collide(dot):
             dots.remove(dot)
     # create new dots to replace the ones that were removed,
     # put them in a random position around the screen
